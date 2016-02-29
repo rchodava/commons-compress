@@ -34,7 +34,7 @@ import static org.apache.commons.compress.archivers.zip.ZipConstants.*;
  * necessarily have to be a file. {@link ZipFile} is an implementation which uses
  * a {@link RandomAccessFile}.
  */
-public abstract class ZipArchiveRandomAccessStream implements Closeable {
+public class ZipArchiveRandomAccessStream implements Closeable {
     private static final int HASH_SIZE = 509;
     static final int NIBLET_MASK = 0x0f;
     static final int BYTE_SHIFT = 8;
@@ -100,6 +100,18 @@ public abstract class ZipArchiveRandomAccessStream implements Closeable {
     private final byte[] WORD_BUF = new byte[WORD];
     private final byte[] CFH_BUF = new byte[CFH_LEN];
     private final byte[] SHORT_BUF = new byte[SHORT];
+
+    /**
+     * Opens the given file for reading, assuming "UTF8" for file names.
+     *
+     * @param archiveName the name of the archive
+     * @param archive the archive stream.
+     *
+     * @throws IOException if an error occurs while reading the file.
+     */
+    public ZipArchiveRandomAccessStream(String archiveName, RandomAccessStream archive) throws IOException {
+        this(archiveName, archive, ZipEncodingHelper.UTF8, true);
+    }
 
     /**
      * Opens the given file for reading, assuming the specified
